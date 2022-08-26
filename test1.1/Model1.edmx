@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CR_Estimation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="crm_id" Type="int" />
+          <Property Name="requirement_id" Type="varchar" MaxLength="255" />
+          <Property Name="requirement_from_original_id" Type="varchar" MaxLength="255" />
+          <Property Name="object_type" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="CRM">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="crm_id" Type="varchar" MaxLength="255" />
+          <Property Name="cr_description" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Scenario">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="scenario_id" Type="varchar" MaxLength="255" />
+          <Property Name="requirement_id" Type="int" />
+          <Property Name="scenario_description" Type="varchar" MaxLength="255" />
+          <Property Name="new_tcs_very_simple" Type="float" />
+          <Property Name="new_tcs_normal" Type="float" />
+          <Property Name="new_tcs_complex" Type="float" />
+          <Property Name="changed_tcs_very_simple" Type="float" />
+          <Property Name="changed_tcs_normal" Type="float" />
+          <Property Name="changed_tcs_complex" Type="float" />
+          <Property Name="nb_tc_short" Type="float" />
+          <Property Name="nb_tc_normal" Type="float" />
+          <Property Name="nb_tc_very_long" Type="float" />
+          <Property Name="new_tcs_effort_per_scenario" Type="float" />
+          <Property Name="chanegd_tcs_effort_per_scenario" Type="float" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="CR_Estimation_fk0">
+          <End Role="CRM" Type="Self.CRM" Multiplicity="0..1" />
+          <End Role="CR_Estimation" Type="Self.CR_Estimation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CRM">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CR_Estimation">
+              <PropertyRef Name="crm_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Scenario_fk0">
+          <End Role="CR_Estimation" Type="Self.CR_Estimation" Multiplicity="0..1" />
+          <End Role="Scenario" Type="Self.Scenario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CR_Estimation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Scenario">
+              <PropertyRef Name="requirement_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="CR_Estimation" EntityType="Self.CR_Estimation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CRM" EntityType="Self.CRM" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Scenario" EntityType="Self.Scenario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="CR_Estimation_fk0" Association="Self.CR_Estimation_fk0">
+            <End Role="CRM" EntitySet="CRM" />
+            <End Role="CR_Estimation" EntitySet="CR_Estimation" />
+          </AssociationSet>
+          <AssociationSet Name="Scenario_fk0" Association="Self.Scenario_fk0">
+            <End Role="CR_Estimation" EntitySet="CR_Estimation" />
+            <End Role="Scenario" EntitySet="Scenario" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CR_Estimation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="crm_id" Type="Int32" />
+          <Property Name="requirement_id" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="requirement_from_original_id" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="object_type" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CRM" Relationship="Self.CR_Estimation_fk0" FromRole="CR_Estimation" ToRole="CRM" />
+          <NavigationProperty Name="Scenarios" Relationship="Self.Scenario_fk0" FromRole="CR_Estimation" ToRole="Scenario" />
+        </EntityType>
+        <EntityType Name="CRM">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="crm_id" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="cr_description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CR_Estimation" Relationship="Self.CR_Estimation_fk0" FromRole="CRM" ToRole="CR_Estimation" />
+        </EntityType>
+        <EntityType Name="Scenario">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="scenario_id" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="requirement_id" Type="Int32" />
+          <Property Name="scenario_description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="new_tcs_very_simple" Type="Double" />
+          <Property Name="new_tcs_normal" Type="Double" />
+          <Property Name="new_tcs_complex" Type="Double" />
+          <Property Name="changed_tcs_very_simple" Type="Double" />
+          <Property Name="changed_tcs_normal" Type="Double" />
+          <Property Name="changed_tcs_complex" Type="Double" />
+          <Property Name="nb_tc_short" Type="Double" />
+          <Property Name="nb_tc_normal" Type="Double" />
+          <Property Name="nb_tc_very_long" Type="Double" />
+          <Property Name="new_tcs_effort_per_scenario" Type="Double" />
+          <Property Name="chanegd_tcs_effort_per_scenario" Type="Double" />
+          <NavigationProperty Name="CR_Estimation" Relationship="Self.Scenario_fk0" FromRole="Scenario" ToRole="CR_Estimation" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="CR_Estimation_fk0">
+          <End Role="CRM" Type="Self.CRM" Multiplicity="0..1" />
+          <End Role="CR_Estimation" Type="Self.CR_Estimation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CRM">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CR_Estimation">
+              <PropertyRef Name="crm_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Scenario_fk0">
+          <End Role="CR_Estimation" Type="Self.CR_Estimation" Multiplicity="0..1" />
+          <End Role="Scenario" Type="Self.Scenario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CR_Estimation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Scenario">
+              <PropertyRef Name="requirement_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CR_Estimation" EntityType="Self.CR_Estimation" />
+          <EntitySet Name="CRMs" EntityType="Self.CRM" />
+          <EntitySet Name="Scenarios" EntityType="Self.Scenario" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <AssociationSet Name="CR_Estimation_fk0" Association="Self.CR_Estimation_fk0">
+            <End Role="CRM" EntitySet="CRMs" />
+            <End Role="CR_Estimation" EntitySet="CR_Estimation" />
+          </AssociationSet>
+          <AssociationSet Name="Scenario_fk0" Association="Self.Scenario_fk0">
+            <End Role="CR_Estimation" EntitySet="CR_Estimation" />
+            <End Role="Scenario" EntitySet="Scenarios" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities1">
+          <EntitySetMapping Name="CR_Estimation">
+            <EntityTypeMapping TypeName="Model.CR_Estimation">
+              <MappingFragment StoreEntitySet="CR_Estimation">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="crm_id" ColumnName="crm_id" />
+                <ScalarProperty Name="requirement_id" ColumnName="requirement_id" />
+                <ScalarProperty Name="requirement_from_original_id" ColumnName="requirement_from_original_id" />
+                <ScalarProperty Name="object_type" ColumnName="object_type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CRMs">
+            <EntityTypeMapping TypeName="Model.CRM">
+              <MappingFragment StoreEntitySet="CRM">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="crm_id" ColumnName="crm_id" />
+                <ScalarProperty Name="cr_description" ColumnName="cr_description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Scenarios">
+            <EntityTypeMapping TypeName="Model.Scenario">
+              <MappingFragment StoreEntitySet="Scenario">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="scenario_id" ColumnName="scenario_id" />
+                <ScalarProperty Name="requirement_id" ColumnName="requirement_id" />
+                <ScalarProperty Name="scenario_description" ColumnName="scenario_description" />
+                <ScalarProperty Name="new_tcs_very_simple" ColumnName="new_tcs_very_simple" />
+                <ScalarProperty Name="new_tcs_normal" ColumnName="new_tcs_normal" />
+                <ScalarProperty Name="new_tcs_complex" ColumnName="new_tcs_complex" />
+                <ScalarProperty Name="changed_tcs_very_simple" ColumnName="changed_tcs_very_simple" />
+                <ScalarProperty Name="changed_tcs_normal" ColumnName="changed_tcs_normal" />
+                <ScalarProperty Name="changed_tcs_complex" ColumnName="changed_tcs_complex" />
+                <ScalarProperty Name="nb_tc_short" ColumnName="nb_tc_short" />
+                <ScalarProperty Name="nb_tc_normal" ColumnName="nb_tc_normal" />
+                <ScalarProperty Name="nb_tc_very_long" ColumnName="nb_tc_very_long" />
+                <ScalarProperty Name="new_tcs_effort_per_scenario" ColumnName="new_tcs_effort_per_scenario" />
+                <ScalarProperty Name="chanegd_tcs_effort_per_scenario" ColumnName="chanegd_tcs_effort_per_scenario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Model.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

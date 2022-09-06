@@ -36,14 +36,15 @@ namespace test1._1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            // TODO: This line of code loads data into the '_test1_1DataSet6.CR_Estimation' table. You can move, or remove it, as needed.
+            this.cR_EstimationTableAdapter3.Fill(this._test1_1DataSet6.CR_Estimation);
 
             this.cR_EstimationTableAdapter2.Fill(this._test1_1DataSet2.CR_Estimation);
 
             // fill dataGridView manually with sql request
 
 
-            var select = "SELECT * FROM CR_ESTIMATION WHERE crm_id =" + crm_ID;
+            var select = "SELECT * FROM CR_ESTIMATION WHERE crm_id = '" + crm_ID+"'";
             // Connection String here
             var c = new SqlConnection(@"Data Source=.;Initial Catalog=test1.1;Integrated Security=True");
             var dataAdapter = new SqlDataAdapter(select, c);
